@@ -1,3 +1,8 @@
+DID NOT WORK INTERACTIONS DO NOT USE
+DO NOT USE
+DO NOT USE
+FAILED INTERACTIONS NO SMART CONTRACT INTERACTIONS
+CREATING A NEW CONTRACT
 # bmc1-dapp
 Standalone Web3 Dapp to invest Polygon into 35/65/95 days locking vaults + general one
 # BMC1SilverX DApp
