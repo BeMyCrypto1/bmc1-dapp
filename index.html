@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BMC1SilverX DApp - Invest in Silver Token Vaults</title>
+    <meta name="description" content="BMC1SilverX token with 35/65/95 day vaults. Fixed 0.05% fees. Company: BMC1 BeMyCrypto1 LLC">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'silver': {
+                            400: '#C0C0C0',
+                            500: '#A8A8A8',
+                            600: '#909090',
+                        },
+                        'bmc-blue': '#1E40AF',
+                        'bmc-green': '#10B981',
+                        'bmc-amber': '#F59E0B',
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom Styles -->
+    <style>
+        :root {
+            --primary: #C0C0C0;
+            --secondary: #1E40AF;
+            --accent: #F59E0B;
+        }
+        
+        .vault-card {
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        
+        .vault-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+        }
+        
+        .vault-card.selected {
+            border-color: var(--accent);
+            box-shadow: 0 10px 25px rgba(245, 158, 11, 0.3);
+        }
+        
+        .glow {
+            box-shadow: 0 0 20px rgba(192, 192, 192, 0.3);
+        }
+        
+        .spinner {
+            border: 3px solid rgba(255,255,255,0.1);
+            border-top: 3px solid #C0C0C0;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        @media (max-width: 768px) {
+            .mobile-stack {
+                flex-direction: column;
+            }
+        }
+    </style>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🥈</text></svg>">
+</head>
+<body class="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 min-h-screen text-white">
+    
+    <!-- Navigation -->
+    <nav class="bg-gray-800/90 backdrop-blur-md sticky top-0 z-50 border-b border-gray-700">
+        <div class="container mx-auto px-4 py-3">
+            <div class="flex justify-between items-center">
+                <!-- Logo -->
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-gradient-to-r from-silver-400 to-silver-600 rounded-lg flex items-center justify-center glow">
+                        <i class="fas fa-coins text-white text-xl"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold tracking-tight">BMC1<span class="text-silver-400">SilverX</span></h1>
+                        <p class="text-xs text-gray-400 font-mono">BMC1 BeMyCrypto1 LLC</p>
+                    </div>
+                </div>
+                
+                <!-- Desktop Navigation -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#dashboard" class="text-gray-300 hover:text-white font-medium">Dashboard</a>
+                    <a href="#invest" class="text-gray-300 hover:text-white font-medium">Invest</a>
+                    <a href="#faq" class="text-gray-300 hover:text-white font-medium">FAQ</a>
+                    
+                    <div class="flex items-center space-x-2 bg-gray-700/50 px-3 py-2 rounded-lg">
+                        <div class="w-2 h-2 bg-green-500 rounded-full pulse"></div>
+                        <span class="text-sm font-mono">Polygon</span>
+                    </div>
+                    
+                    <button id="connectWallet" class="bg-gradient-to-r from-bmc-blue to-blue-900 hover:from-blue-700 hover:to-blue-800 px-6 py-2 rounded-lg font-medium transition-all duration-300 flex items-center space-x-2 shadow-lg hover:shadow-xl">
+                        <i class="fas fa-wallet"></i>
+                        <span id="walletButtonText">Connect Wallet</span>
+                    </button>
+                </div>
+                
+                <!-- Mobile Menu Button -->
+                <button id="mobileMenuButton" class="md:hidden text-2xl text-gray-300 hover:text-white">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Mobile Menu -->
+        <div id="mobileMenu" class="md:hidden bg-gray-800 border-t border-gray-700 hidden">
+            <div class="container mx-auto px-4 py-4 space-y-4">
+                <a href="#dashboard" class="block text-gray-300 hover:text-white py-2">Dashboard</a>
+                <a href="#invest" class="block text-gray-300 hover:text-white py-2">Invest</a>
+                <a href="#faq" class="block text-gray-300 hover:text-white py-2">FAQ</a>
+                <div class="pt-4 border-t border-gray-700">
+                    <button id="mobileConnect" class="w-full bg-gradient-to-r from-bmc-blue to-blue-900 py-3 rounded-lg font-medium">
+                        Connect Wallet
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+        
+        <!-- Hero Section -->
+        <section class="text-center mb-12">
+            <h1 class="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-silver-400 to-white bg-clip-text text-transparent">
+                Silver Token Investments
+            </h1>
+            <p class="text-xl text-gray-300 mb-6 max-w-3xl mx-auto">
+                Choose between time-locked vaults (35/65/95 days) or trade freely in the general pool.
+                Fixed 0.05% fees on all transactions.
+            </p>
+            <div class="flex flex-wrap justify-center gap-4 mb-8">
+                <div class="bg-gray-800/50 px-4 py-2 rounded-lg">
+                    <span class="text-silver-400">0.05%</span> Fixed Fees
+                </div>
+                <div class="bg-gray-800/50 px-4 py-2 rounded-lg">
+                    <span class="text-green-400">25%</span> Early Withdrawal Penalty
+                </div>
+                <div class="bg-gray-800/50 px-4 py-2 rounded-lg">
+                    <span class="text-blue-400">65B</span> Total Supply
+                </div>
+            </div>
+        </section>
+        
+        <!-- Wallet Status -->
+        <div id="walletStatus" class="hidden bg-gradient-to-r from-gray-800 to-gray-900 rounded-xl p-6 mb-8 border border-gray-700 shadow-xl">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div>
+                    <div class="flex items-center space-x-3">
+                        <div class="w-3 h-3 bg-green-500 rounded-full pulse"></div>
+                        <h2 class="text-lg font-semibold">Wallet Connected</h2>
+                    </div>
+                    <p id="walletAddress" class="text-gray-400 font-mono text-sm mt-1 bg-gray-900/50 px-3 py-2 rounded inline-block">
+                        0x0000...0000
+                    </p>
+                </div>
+                
+                <div class="flex flex-col md:flex-row items-start md:items-center gap-4 md:gap-8">
+                    <div class="text-center md:text-right">
+                        <p class="text-gray-400 text-sm">MATIC Balance</p>
+                        <p id="maticBalance" class="text-2xl font-bold">0.00</p>
+                    </div>
+                    
+                    <div class="text-center md:text-right">
+                        <p class="text-gray-400 text-sm">BMC1x Balance</p>
+                        <p id="bmc1Balance" class="text-2xl font-bold">0.00</p>
+                    </div>
+                    
+                    <button id="disconnectWallet" class="bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded-lg text-sm">
+                        Disconnect
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Vault Selection -->
+        <section id="invest" class="mb-12">
+            <h2 class="text-2xl font-bold mb-2">Choose Your Investment Strategy</h2>
+            <p class="text-gray-400 mb-6">Select one option below. Vaults offer commitment benefits, General Pool offers flexibility.</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                
+                <!-- Vault 35 -->
+                <div class="vault-card bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl p-6 cursor-pointer" data-vault="35">
+                    <div class="flex justify-between items-start mb-4">
+                        <div>
+                            <h3 class="text-xl font-bold">35-Day Vault</h3>
+                            <p class="text-gray-400 text-sm">Short-term commitment</p>
+                        </div>
+                        <div class="w-12 h-12 bg-gradient-to-br from-blue-800 to-blue-600 rounded-lg flex items-center justify-center">
+                            <span class="text-2xl font-bold">35</span>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-3 mb-6">
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-400">Fee:</span>
+                            <span class="text-green-400 font-semibold">0.05%</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-400">Early Withdrawal:</span>
+                            <span class="text-red-400 font-semibold">25% + 0.05%</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-400">Recommended:</span>
+                            <span class="text-blue-400">1-2 months</span>
+                        </div>
+                    </div>
+                    
+                    <button class="w-full bg-gradient-to-r from-blue-700 to-blue-800 hover:from-blue-600 hover:to-blue-700 py-3 rounded-lg font-medium transition-all duration-300 select-vault" data-vault="35">
+                        Select Vault
+                    </button>
+                </div>
+                
+                <!-- Vault 65 -->
+                <div class="vault-card bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl p-6 cursor-pointer" data-vault="65">
+                    <div class="flex justify-between items-start mb-4">
+                        <div>
+                            <h3 class="text-xl font-bold">65-Day Vault</h3>
+                            <p class="text-gray-400 text-sm">Medium-term growth</p>
+                        </div>
+                        <div class="w-12 h-12 bg-gradient-to-br from-purple-800 to-purple-600 rounded-lg flex items-center justify-center">
+                            <span class="text-2xl font-bold">65</span>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-3 mb-6">
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-400">Fee:</span>
+                            <span class="text-green-400 font-semibold">0.05%</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-400">Early Withdrawal:</span>
+                            <span class="text-red-400 font-semibold">25% + 0.05%</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-400">Recommended:</span>
+                            <span class="text-purple-400">2-3 months</span>
+                        </div>
+                    </div>
+                    
+                    <button class="w-full bg-gradient-to-r from-purple-700 to-purple-800 hover:from-purple-600 hover:to-purple-700 py-3 rounded-lg font-medium transition-all duration-300 select-vault" data-vault="65">
+                        Select Vault
+                    </button>
+                </div>
+                
+                <!-- Vault 95 -->
+                <div class="vault-card bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl p-6 cursor-pointer" data-vault="95">
+                    <div class="flex justify-between items-start mb-4">
+                        <div>
+                            <h3 class="text-xl font-bold">95-Day Vault</h3>
+                            <p class="text-gray-400 text-sm">Long-term investment</p>
+                        </div>
+                        <div class="w-12 h-12 bg-gradient-to-br from-amber-800 to-amber-600 rounded-lg flex items-center justify-center">
+                            <span class="text-2xl font-bold">95</span>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-3 mb-6">
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-400">Fee:</span>
+                            <span class="text-green-400 font-semibold">0.05%</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-400">Early Withdrawal:</span>
+                            <span class="text-red-400 font-semibold">25% + 0.05%</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-400">Recommended:</span>
+                            <span class="text-amber-400">3+ months</span>
+                        </div>
+                    </div>
+                    
+                    <button class="w-full bg-gradient-to-r from-amber-700 to-amber-800 hover:from-amber-600 hover:to-amber-700 py-3 rounded-lg font-medium transition-all duration-300 select-vault" data-vault="95">
+                        Select Vault
+                    </button>
+                </div>
+                
+                <!-- General Pool -->
+                <div class="vault-card bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl p-6 cursor-pointer" data-vault="0">
+                    <div class="flex justify-between items-start mb-4">
+                        <div>
+                            <h3 class="text-xl font-bold">General Pool</h3>
+                            <p class="text-gray-400 text-sm">Flexible trading</p>
+                        </div>
+                        <div class="w-12 h-12 bg-gradient-to-br from-green-800 to-green-600 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-unlock text-2xl"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-3 mb-6">
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-400">Fee:</span>
+                            <span class="text-green-400 font-semibold">0.05% per tx</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-400">Withdrawal:</span>
+                            <span class="text-green-400 font-semibold">Anytime</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-400">Best For:</span>
+                            <span class="text-green-400">Active traders</span>
+                        </div>
+                    </div>
+                    
+                    <button class="w-full bg-gradient-to-r from-green-700 to-green-800 hover:from-green-600 hover:to-green-700 py-3 rounded-lg font-medium transition-all duration-300 select-vault" data-vault="0">
+                        Select Pool
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Selected Vault Warning -->
+            <div id="selectionWarning" class="hidden bg-gradient-to-r from-amber-900/30 to-amber-800/20 border border-amber-700/50 rounded-xl p-6 mb-6">
+                <div class="flex items-start space-x-4">
+                    <i class="fas fa-exclamation-circle text-amber-400 text-2xl mt-1"></i>
+                    <div class="flex-1">
+                        <h4 class="font-bold text-amber-300 mb-2">Important Notice</h4>
+                        <p class="text-amber-200/90 mb-4">
+                            You have selected a <span id="selectedVaultType" class="font-bold">35-Day Vault</span>. 
+                            This will lock your tokens for the full duration. Early withdrawal incurs a 
+                            <span class="font-bold text-red-300">25% penalty + 0.05% fee</span>.
+                        </p>
+                        <div class="flex items-center">
+                            <input type="checkbox" id="termsCheckbox" class="w-5 h-5 mr-3 rounded bg-gray-700 border-gray-600">
+                            <label for="termsCheckbox" class="text-amber-100">
+                                I understand and accept the terms, including the early withdrawal penalty
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Investment Interface -->
+        <section id="investmentInterface" class="hidden mb-12">
+            <div class="bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl p-8 border border-gray-700 shadow-2xl">
+                <h2 class="text-2xl font-bold mb-6 flex items-center">
+                    <i class="fas fa-coins text-silver-400 mr-3"></i>
+                    Invest in <span id="investmentTitle" class="text-silver-400 ml-2">General Pool</span>
+                </h2>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <!-- Left Column -->
+                    <div>
+                        <div class="mb-6">
+                            <label class="block text-gray-300 mb-3 text-lg font-medium">Investment Amount (MATIC)</label>
+                            <div class="relative">
+                                <input type="number" 
+                                       id="investmentAmount" 
+                                       class="w-full bg-gray-900 border-2 border-gray-700 rounded-xl py-5 px-6 text-2xl font-bold focus:outline-none focus:border-silver-500 transition-colors placeholder-gray-500"
+                                       placeholder="0.00"
+                                       min="1"
+                                       step="0.01"
+                                       value="10">
+                                <div class="absolute right-4 top-1/2 transform -translate-y-1/2">
+                                    <button id="maxButton" class="bg-gradient-to-r from-blue-600 to-blue-800 hover:from-blue-700 hover:to-blue-900 px-4 py-2 rounded-lg font-medium text-sm">
+                                        MAX
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="flex justify-between text-sm text-gray-400 mt-3 px-2">
+                                <span>Available: <span id="availableBalance" class="text-white font-medium">0</span> MATIC</span>
+                                <span>Minimum: <span class="text-white font-medium">1</span> MATIC</span>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-8">
+                            <label class="block text-gray-300 mb-3">Quick Select</label>
+                            <div class="grid grid-cols-4 gap-3">
+                                <button class="quick-amount bg-gray-700 hover:bg-gray-600 py-3 rounded-lg transition-colors font-medium" data-percent="25">25%</button>
+                                <button class="quick-amount bg-gray-700 hover:bg-gray-600 py-3 rounded-lg transition-colors font-medium" data-percent="50">50%</button>
+                                <button class="quick-amount bg-gray-700 hover:bg-gray-600 py-3 rounded-lg transition-colors font-medium" data-percent="75">75%</button>
+                                <button class="quick-amount bg-gray-700 hover:bg-gray-600 py-3 rounded-lg transition-colors font-medium" data-percent="100">100%</button>
+                            </div>
+                        </div>
+                        
+                        <button id="confirmButton" 
+                                class="w-full bg-gradient-to-r from-green-600 via-green-700 to-green-800 hover:from-green-700 hover:via-green-800 hover:to-green-900 py-5 rounded-xl font-bold text-xl transition-all duration-300 shadow-lg hover:shadow-2xl disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center">
+                            <i class="fas fa-lock mr-3"></i>
+                            Confirm Investment
+                        </button>
+                    </div>
+                    
+                    <!-- Right Column -->
+                    <div>
+                        <div class="bg-gray-900/70 rounded-xl p-6 border border-gray-700">
+                            <h3 class="text-xl font-bold mb-6 pb-4 border-b border-gray-700">Investment Summary</h3>
+                            
+                            <div class="space-y-5">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-300">You Invest:</span>
+                                    <span id="summaryInvest" class="text-2xl font-bold">0.00 MATIC</span>
+                                </div>
+                                
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-300">Token Amount:</span>
+                                    <span id="summaryTokens" class="text-2xl font-bold text-silver-400">0.00 BMC1x</span>
+                                </div>
+                                
+                                <div class="flex justify-between items-center pt-4 border-t border-gray-700">
+                                    <span class="text-gray-300">Transaction Fee (0.05%):</span>
+                                    <span id="summaryFee" class="text-xl font-bold text-red-400">0.00 BMC1x</span>
+                                </div>
+                                
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-300">Net Received:</span>
+                                    <span id="summaryNet" class="text-3xl font-bold text-green-400">0.00 BMC1x</span>
+                                </div>
+                                
+                                <!-- Vault Details -->
+                                <div id="vaultDetails" class="hidden pt-6 border-t border-gray-700">
+                                    <h4 class="font-bold text-gray-300 mb-4">Vault Details</h4>
+                                    <div class="space-y-3">
+                                        <div class="flex justify-between">
+                                            <span class="text-gray-400">Duration:</span>
+                                            <span id="detailDuration" class="font-medium">35 days</span>
+                                        </div>
+                                        <div class="flex justify-between">
+                                            <span class="text-gray-400">Unlock Date:</span>
+                                            <span id="detailUnlock" class="font-medium">--</span>
+                                        </div>
+                                        <div class="flex justify-between">
+                                            <span class="text-gray-400">Early Withdrawal:</span>
+                                            <span class="text-red-300 font-medium">25% + 0.05% fee</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Pool Details -->
+                                <div id="poolDetails" class="hidden pt-6 border-t border-gray-700">
+                                    <h4 class="font-bold text-gray-300 mb-4">Pool Details</h4>
+                                    <div class="space-y-3">
+                                        <div class="flex justify-between">
+                                            <span class="text-gray-400">Availability:</span>
+                                            <span class="text-green-300 font-medium">Immediate</span>
+                                        </div>
+                                        <div class="flex justify-between">
+                                            <span class="text-gray-400">Transfer Fee:</span>
+                                            <span class="font-medium">0.05% per transaction</span>
+                                        </div>
+                                        <div class="flex justify-between">
+                                            <span class="text-gray-400">Trading:</span>
+                                            <span class="text-green-300 font-medium">Unrestricted</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Conversion Rate -->
+                        <div class="mt-6 bg-gray-900/40 rounded-lg p-4 text-center">
+                            <p class="text-gray-400 text-sm">Conversion Rate</p>
+                            <p class="text-lg font-bold">1 MATIC = <span id="conversionRate" class="text-silver-400">100</span> BMC1x</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- FAQ Section -->
+        <section id="faq" class="mb-12">
+            <h2 class="text-2xl font-bold mb-6">Frequently Asked Questions</h2>
+            
+            <div class="space-y-4">
+                <div class="bg-gray-800/50 rounded-xl p-6">
+                    <h3 class="font-bold text-lg mb-2">What are the fees?</h3>
+                    <p class="text-gray-300">All transactions have a fixed 0.05% fee. Early vault withdrawals have an additional 25% penalty.</p>
+                </div>
+                
+                <div class="bg-gray-800/50 rounded-xl p-6">
+                    <h3 class="font-bold text-lg mb-2">Can I have multiple vaults?</h3>
+                    <p class="text-gray-300">No, each wallet address can only have one active vault at a time.</p>
+                </div>
+            </div>
+        </section>
+        
+    </main>
+    
+    <!-- Footer -->
+    <footer class="bg-gray-900/90 border-t border-gray-800 py-8 mt-12">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+                <div>
+                    <div class="flex items-center space-x-3 mb-4">
+                        <div class="w-10 h-10 bg-gradient-to-r from-silver-400 to-silver-600 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-coins text-white text-xl"></i>
+                        </div>
+                        <div>
+                            <p class="font-bold text-lg">BMC1<span class="text-silver-400">SilverX</span></p>
+                            <p class="text-xs text-gray-400">by BMC1 BeMyCrypto1 LLC</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-400 text-sm">
+                        A utility token with time-locked vault options and fixed 0.05% transaction fees.
+                    </p>
+                </div>
+                
+                <div>
+                    <h4 class="font-bold mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#invest" class="text-gray-400 hover:text-white transition-colors">Invest Now</a></li>
+                        <li><a href="#faq" class="text-gray-400 hover:text-white transition-colors">FAQ</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="font-bold mb-4">Contract Information</h4>
+                    <div class="bg-gray-800/50 rounded-lg p-4">
+                        <p class="text-gray-400 text-sm mb-2">Contract Address:</p>
+                        <p id="contractAddressDisplay" class="font-mono text-xs break-all bg-gray-900/70 p-3 rounded">
+                            0x2E326746b717c534cE6292F98A34dcE270A94f78
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="pt-8 border-t border-gray-800 text-center">
+                <p class="text-gray-500 text-sm">
+                    © 2024 BMC1 BeMyCrypto1 LLC. All rights reserved.<br>
+                    CEO: Ben Macedo • Email: bmc1.ceo.macedo@bemycrypto1.online
+                </p>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- Transaction Modal -->
+    <div id="transactionModal" class="fixed inset-0 bg-black/80 flex items-center justify-center z-50 hidden backdrop-blur-sm">
+        <div class="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl p-8 max-w-md w-full mx-4 border border-gray-700 shadow-2xl">
+            <div class="text-center">
+                <div class="w-20 h-20 mx-auto mb-6 relative">
+                    <div class="spinner"></div>
+                    <div class="absolute inset-0 flex items-center justify-center">
+                        <i class="fas fa-coins text-3xl text-silver-400"></i>
+                    </div>
+                </div>
+                
+                <h3 class="text-2xl font-bold mb-2" id="modalTitle">Processing Transaction</h3>
+                <p class="text-gray-400 mb-6" id="modalMessage">Please confirm the transaction in your wallet...</p>
+                
+                <button id="closeModal" class="bg-gradient-to-r from-bmc-blue to-blue-900 hover:from-blue-700 hover:to-blue-800 px-6 py-3 rounded-lg transition-colors">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- JavaScript -->
+    <script src="https://cdn.ethers.io/lib/ethers-5.7.umd.min.js"></script>
+    
+    <script>
+        // CONFIGURATION - YOUR CONTRACT ADDRESS IS ALREADY HERE!
+        const CONFIG = {
+            CONTRACT_ADDRESS: "0x2E326746b717c534cE6292F98A34dcE270A94f78",
+            CONTRACT_ABI: [
+                "function name() view returns (string)",
+                "function symbol() view returns (string)",
+                "function decimals() view returns (uint8)",
+                "function totalSupply() view returns (uint256)",
+                "function balanceOf(address) view returns (uint256)",
+                "function transfer(address, uint256) returns (bool)",
+                "function buyWithVault(uint8) payable",
+                "function claimMaturedTokens()",
+                "function withdrawEarlyFromVault()",
+                "function getUserVault(address) view returns (uint256, uint256, uint8, uint256, bool)",
+                "function getTimeUntilMaturity(address) view returns (uint256)"
+            ],
+            NETWORK: {
+                chainId: "0x89",
+                chainName: "Polygon Mainnet",
+                nativeCurrency: { name: "MATIC", symbol: "MATIC", decimals: 18 },
+                rpcUrls: ["https://polygon-rpc.com/"]
+            },
+            VAULT_TYPES: {
+                0: { name: "General Pool", days: 0, color: "green" },
+                1: { name: "35-Day Vault", days: 35, color: "blue" },
+                2: { name: "65-Day Vault", days: 65, color: "purple" },
+                3: { name: "95-Day Vault", days: 95, color: "amber" }
+            },
+            FEES: { transaction: 5, earlyWithdrawalPenalty: 2500 },
+            UI: { conversionRate: 100, minInvestment: 1 }
+        };
+        
+        // Helper Functions
+        function formatAddress(address) {
+            if (!address) return "";
+            return address.substring(0, 6) + "..." + address.substring(address.length - 4);
+        }
+        
+        function formatNumber(number, decimals = 2) {
+            return parseFloat(number).toLocaleString('en-US', {
+                minimumFractionDigits: decimals,
+                maximumFractionDigits: decimals
+            });
+        }
+        
+        // Wallet Connection
+        class WalletManager {
+            constructor() {
+                this.isConnected = false;
+                this.address = null;
+                this.provider = null;
+            }
+            
+            async connect() {
+                try {
+                    if (typeof window.ethereum === 'undefined') {
+                        alert('Please install MetaMask to use this DApp');
+                        return;
+                    }
+                    
+                    // Request account access
+                    const accounts = await window.ethereum.request({
+                        method: 'eth_requestAccounts'
+                    });
+                    
+                    this.address = accounts[0];
+                    this.isConnected = true;
+                    this.provider = new ethers.providers.Web3Provider(window.ethereum);
+                    
+                    this.updateUI();
+                    this.showToast('Wallet connected successfully!', 'success');
+                    
+                    // Check network
+                    await this.checkNetwork();
+                    
+                } catch (error) {
+                    console.error('Wallet connection error:', error);
+                    this.showToast('Failed to connect wallet', 'error');
+                }
+            }
+            
+            async checkNetwork() {
+                try {
+                    const network = await this.provider.getNetwork();
+                    if (network.chainId !== 137) { // Polygon Mainnet
+                        this.showToast('Please switch to Polygon Mainnet', 'warning');
+                    }
+                } catch (error) {
+                    console.error('Network check error:', error);
+                }
+            }
+            
+            disconnect() {
+                this.isConnected = false;
+                this.address = null;
+                this.provider = null;
+                this.updateUI();
+                this.showToast('Wallet disconnected', 'info');
+            }
+            
+            updateUI() {
+                const statusEl = document.getElementById('walletStatus');
+                const buttonEl = document.getElementById('connectWallet');
+                const mobileBtn = document.getElementById('mobileConnect');
+                const addressEl = document.getElementById('walletAddress');
+                
+                if (this.isConnected && this.address) {
+                    // Show connected
+                    if (statusEl) statusEl.classList.remove('hidden');
+                    if (buttonEl) {
+                        buttonEl.innerHTML = '<i class="fas fa-check-circle mr-2"></i>Connected';
+                        buttonEl.classList.remove('from-bmc-blue', 'to-blue-900');
+                        buttonEl.classList.add('from-green-600', 'to-green-800');
+                    }
+                    if (mobileBtn) {
+                        mobileBtn.innerHTML = '<i class="fas fa-check-circle mr-2"></i>Connected';
+                        mobileBtn.classList.remove('from-bmc-blue', 'to-blue-900');
+                        mobileBtn.classList.add('from-green-600', 'to-green-800');
+                    }
+                    if (addressEl) addressEl.textContent = formatAddress(this.address);
+                    
+                } else {
+                    // Show disconnected
+                    if (statusEl) statusEl.classList.add('hidden');
+                    if (buttonEl) {
+                        buttonEl.innerHTML = '<i class="fas fa-wallet mr-2"></i>Connect Wallet';
+                        buttonEl.classList.remove('from-green-600', 'to-green-800');
+                        buttonEl.classList.add('from-bmc-blue', 'to-blue-900');
+                    }
+                    if (mobileBtn) {
+                        mobileBtn.innerHTML = 'Connect Wallet';
+                        mobileBtn.classList.remove('from-green-600', 'to-green-800');
+                        mobileBtn.classList.add('from-bmc-blue', 'to-blue-900');
+                    }
+                }
+            }
+            
+            showToast(message, type = 'info') {
+                // Create toast element
+                const toast = document.createElement('div');
+                toast.className = `fixed top-4 right-4 px-6 py-4 rounded-xl shadow-2xl z-50 ${
+                    type === 'success' ? 'bg-green-700' :
+                    type === 'error' ? 'bg-red-700' :
+                    type === 'warning' ? 'bg-amber-700' : 'bg-blue-700'
+                }`;
+                toast.innerHTML = `
+                    <div class="flex items-center">
+                        <i class="fas fa-${
+                            type === 'success' ? 'check-circle' :
+                            type === 'error' ? 'exclamation-circle' :
+                            type === 'warning' ? 'exclamation-triangle' : 'info-circle'
+                        } mr-3"></i>
+                        <span>${message}</span>
+                    </div>
+                `;
+                
+                document.body.appendChild(toast);
+                
+                // Remove after 3 seconds
+                setTimeout(() => {
+                    toast.remove();
+                }, 3000);
+            }
+        }
+        
+        // UI Manager
+        class UIManager {
+            constructor() {
+                this.selectedVault = null;
+                this.setupEventListeners();
+            }
+            
+            setupEventListeners() {
+                // Vault selection
+                document.querySelectorAll('.select-vault').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const vaultType = parseInt(e.target.getAttribute('data-vault'));
+                        this.selectVault(vaultType);
+                    });
+                });
+                
+                // Quick amount buttons
+                document.querySelectorAll('.quick-amount').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const percent = parseInt(e.target.getAttribute('data-percent'));
+                        this.setQuickAmount(percent);
+                    });
+                });
+                
+                // Max button
+                document.getElementById('maxButton')?.addEventListener('click', () => {
+                    this.setMaxAmount();
+                });
+                
+                // Investment amount input
+                const amountInput = document.getElementById('investmentAmount');
+                if (amountInput) {
+                    amountInput.addEventListener('input', () => {
+                        this.updateCalculations();
+                    });
+                }
+                
+                // Mobile menu
+                document.getElementById('mobileMenuButton')?.addEventListener('click', () => {
+                    const menu = document.getElementById('mobileMenu');
+                    menu.classList.toggle('hidden');
+                });
+                
+                // Close modal
+                document.getElementById('closeModal')?.addEventListener('click', () => {
+                    document.getElementById('transactionModal').classList.add('hidden');
+                });
+            }
+            
+            selectVault(vaultType) {
+                this.selectedVault = vaultType;
+                
+                // Update UI
+                document.querySelectorAll('.vault-card').forEach(card => {
+                    card.classList.remove('selected');
+                });
+                
+                const selectedCard = document.querySelector(`[data-vault="${vaultType}"]`);
+                if (selectedCard) {
+                    selectedCard.classList.add('selected');
+                }
+                
+                // Show investment interface
+                const investmentInterface = document.getElementById('investmentInterface');
+                if (investmentInterface) {
+                    investmentInterface.classList.remove('hidden');
+                    
+                    // Update title
+                    const title = document.getElementById('investmentTitle');
+                    if (title) {
+                        const vaultName = CONFIG.VAULT_TYPES[vaultType]?.name || 'General Pool';
+                        title.textContent = vaultName;
+                    }
+                    
+                    // Show/hide details
+                    if (vaultType === 0) {
+                        document.getElementById('poolDetails')?.classList.remove('hidden');
+                        document.getElementById('vaultDetails')?.classList.add('hidden');
+                        document.getElementById('selectionWarning')?.classList.add('hidden');
+                    } else {
+                        document.getElementById('poolDetails')?.classList.add('hidden');
+                        document.getElementById('vaultDetails')?.classList.remove('hidden');
+                        document.getElementById('selectionWarning')?.classList.remove('hidden');
+                        
+                        // Update vault details
+                        const vaultTypeEl = document.getElementById('selectedVaultType');
+                        const durationEl = document.getElementById('detailDuration');
+                        const warningDays = document.getElementById('warningDays');
+                        
+                        if (vaultTypeEl) vaultTypeEl.textContent = CONFIG.VAULT_TYPES[vaultType]?.name;
+                        if (durationEl) durationEl.textContent = CONFIG.VAULT_TYPES[vaultType]?.days + ' days';
+                        if (warningDays) warningDays.textContent = CONFIG.VAULT_TYPES[vaultType]?.days;
+                        
+                        // Calculate unlock date
+                        this.updateUnlockDate();
+                    }
+                }
+                
+                // Update calculations
+                this.updateCalculations();
+            }
+            
+            setQuickAmount(percent) {
+                const input = document.getElementById('investmentAmount');
+                if (!input) return;
+                
+                // For demo, use 100 MATIC as available balance
+                const available = 100;
+                const amount = (available * percent) / 100;
+                input.value = amount.toFixed(2);
+                
+                this.updateCalculations();
+            }
+            
+            setMaxAmount() {
+                const input = document.getElementById('investmentAmount');
+                if (!input) return;
+                
+                // For demo, use 100 MATIC
+                input.value = '100.00';
+                this.updateCalculations();
+            }
+            
+            updateCalculations() {
+                const input = document.getElementById('investmentAmount');
+                if (!input) return;
+                
+                const amount = parseFloat(input.value) || 0;
+                
+                // Calculate values
+                const tokens = amount * CONFIG.UI.conversionRate;
+                const fee = tokens * (CONFIG.FEES.transaction / 10000);
+                const net = tokens - fee;
+                
+                // Update UI
+                const summaryInvest = document.getElementById('summaryInvest');
+                const summaryTokens = document.getElementById('summaryTokens');
+                const summaryFee = document.getElementById('summaryFee');
+                const summaryNet = document.getElementById('summaryNet');
+                
+                if (summaryInvest) summaryInvest.textContent = formatNumber(amount, 2) + ' MATIC';
+                if (summaryTokens) summaryTokens.textContent = formatNumber(tokens, 2) + ' BMC1x';
+                if (summaryFee) summaryFee.textContent = formatNumber(fee, 4) + ' BMC1x';
+                if (summaryNet) summaryNet.textContent = formatNumber(net, 2) + ' BMC1x';
+            }
+            
+            updateUnlockDate() {
+                if (!this.selectedVault || this.selectedVault === 0) return;
+                
+                const days = CONFIG.VAULT_TYPES[this.selectedVault]?.days || 0;
+                const unlockDate = new Date();
+                unlockDate.setDate(unlockDate.getDate() + days);
+                
+                const unlockDateEl = document.getElementById('detailUnlock');
+                if (unlockDateEl) {
+                    unlockDateEl.textContent = unlockDate.toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'short',
+                        day: 'numeric'
+                    });
+                }
+            }
+        }
+        
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('BMC1SilverX DApp initialized');
+            
+            // Initialize wallet manager
+            window.wallet = new WalletManager();
+            
+            // Initialize UI manager
+            window.ui = new UIManager();
+            
+            // Set up wallet connection button
+            document.getElementById('connectWallet')?.addEventListener('click', () => {
+                window.wallet.connect();
+            });
+            
+            document.getElementById('mobileConnect')?.addEventListener('click', () => {
+                window.wallet.connect();
+            });
+            
+            // Disconnect button
+            document.getElementById('disconnectWallet')?.addEventListener('click', () => {
+                window.wallet.disconnect();
+            });
+            
+            // Update contract address display
+            const contractDisplay = document.getElementById('contractAddressDisplay');
+            if (contractDisplay) {
+                contractDisplay.textContent = CONFIG.CONTRACT_ADDRESS;
+            }
+            
+            // Show initial calculations
+            window.ui.updateCalculations();
+        });
+        
+        // Listen for MetaMask account changes
+        if (typeof window.ethereum !== 'undefined') {
+            window.ethereum.on('accountsChanged', (accounts) => {
+                if (accounts.length === 0) {
+                    window.wallet.disconnect();
+                } else {
+                    window.wallet.address = accounts[0];
+                    window.wallet.updateUI();
+                }
+            });
+            
+            window.ethereum.on('chainChanged', () => {
+                window.location.reload();
+            });
+        }
+    </script>
+</body>
+</html>
