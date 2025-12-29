@@ -80,6 +80,11 @@
             animation: pulse 2s infinite;
         }
         
+        .disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
         @media (max-width: 768px) {
             .mobile-stack {
                 flex-direction: column;
@@ -155,15 +160,14 @@
                 Silver Token Investments
             </h1>
             <p class="text-xl text-gray-300 mb-6 max-w-3xl mx-auto">
-                Choose between time-locked vaults (35/65/95 days) or trade freely in the general pool.
-                Fixed 0.05% fees on all transactions.
+                Choose between time-locked vaults (35/65/95 days). Fixed 0.05% fees on all transactions.
             </p>
             <div class="flex flex-wrap justify-center gap-4 mb-8">
                 <div class="bg-gray-800/50 px-4 py-2 rounded-lg">
                     <span class="text-silver-400">0.05%</span> Fixed Fees
                 </div>
                 <div class="bg-gray-800/50 px-4 py-2 rounded-lg">
-                    <span class="text-green-400">25%</span> Early Withdrawal Penalty
+                    <span class="text-red-400">25%</span> Early Withdrawal Penalty
                 </div>
                 <div class="bg-gray-800/50 px-4 py-2 rounded-lg">
                     <span class="text-blue-400">65B</span> Total Supply
@@ -204,13 +208,13 @@
         
         <!-- Vault Selection -->
         <section id="invest" class="mb-12">
-            <h2 class="text-2xl font-bold mb-2">Choose Your Investment Strategy</h2>
-            <p class="text-gray-400 mb-6">Select one option below. Vaults offer commitment benefits, General Pool offers flexibility.</p>
+            <h2 class="text-2xl font-bold mb-2">Choose Your Investment Vault</h2>
+            <p class="text-gray-400 mb-6">Select one vault option below. Each vault has a fixed lock period.</p>
             
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                 
                 <!-- Vault 35 -->
-                <div class="vault-card bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl p-6 cursor-pointer" data-vault="35">
+                <div class="vault-card bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl p-6 cursor-pointer" data-vault="1">
                     <div class="flex justify-between items-start mb-4">
                         <div>
                             <h3 class="text-xl font-bold">35-Day Vault</h3>
@@ -236,13 +240,13 @@
                         </div>
                     </div>
                     
-                    <button class="w-full bg-gradient-to-r from-blue-700 to-blue-800 hover:from-blue-600 hover:to-blue-700 py-3 rounded-lg font-medium transition-all duration-300 select-vault" data-vault="35">
+                    <button class="w-full bg-gradient-to-r from-blue-700 to-blue-800 hover:from-blue-600 hover:to-blue-700 py-3 rounded-lg font-medium transition-all duration-300 select-vault" data-vault="1">
                         Select Vault
                     </button>
                 </div>
                 
                 <!-- Vault 65 -->
-                <div class="vault-card bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl p-6 cursor-pointer" data-vault="65">
+                <div class="vault-card bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl p-6 cursor-pointer" data-vault="2">
                     <div class="flex justify-between items-start mb-4">
                         <div>
                             <h3 class="text-xl font-bold">65-Day Vault</h3>
@@ -268,13 +272,13 @@
                         </div>
                     </div>
                     
-                    <button class="w-full bg-gradient-to-r from-purple-700 to-purple-800 hover:from-purple-600 hover:to-purple-700 py-3 rounded-lg font-medium transition-all duration-300 select-vault" data-vault="65">
+                    <button class="w-full bg-gradient-to-r from-purple-700 to-purple-800 hover:from-purple-600 hover:to-purple-700 py-3 rounded-lg font-medium transition-all duration-300 select-vault" data-vault="2">
                         Select Vault
                     </button>
                 </div>
                 
                 <!-- Vault 95 -->
-                <div class="vault-card bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl p-6 cursor-pointer" data-vault="95">
+                <div class="vault-card bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl p-6 cursor-pointer" data-vault="3">
                     <div class="flex justify-between items-start mb-4">
                         <div>
                             <h3 class="text-xl font-bold">95-Day Vault</h3>
@@ -300,40 +304,8 @@
                         </div>
                     </div>
                     
-                    <button class="w-full bg-gradient-to-r from-amber-700 to-amber-800 hover:from-amber-600 hover:to-amber-700 py-3 rounded-lg font-medium transition-all duration-300 select-vault" data-vault="95">
+                    <button class="w-full bg-gradient-to-r from-amber-700 to-amber-800 hover:from-amber-600 hover:to-amber-700 py-3 rounded-lg font-medium transition-all duration-300 select-vault" data-vault="3">
                         Select Vault
-                    </button>
-                </div>
-                
-                <!-- General Pool -->
-                <div class="vault-card bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl p-6 cursor-pointer" data-vault="0">
-                    <div class="flex justify-between items-start mb-4">
-                        <div>
-                            <h3 class="text-xl font-bold">General Pool</h3>
-                            <p class="text-gray-400 text-sm">Flexible trading</p>
-                        </div>
-                        <div class="w-12 h-12 bg-gradient-to-br from-green-800 to-green-600 rounded-lg flex items-center justify-center">
-                            <i class="fas fa-unlock text-2xl"></i>
-                        </div>
-                    </div>
-                    
-                    <div class="space-y-3 mb-6">
-                        <div class="flex justify-between items-center">
-                            <span class="text-gray-400">Fee:</span>
-                            <span class="text-green-400 font-semibold">0.05% per tx</span>
-                        </div>
-                        <div class="flex justify-between items-center">
-                            <span class="text-gray-400">Withdrawal:</span>
-                            <span class="text-green-400 font-semibold">Anytime</span>
-                        </div>
-                        <div class="flex justify-between items-center">
-                            <span class="text-gray-400">Best For:</span>
-                            <span class="text-green-400">Active traders</span>
-                        </div>
-                    </div>
-                    
-                    <button class="w-full bg-gradient-to-r from-green-700 to-green-800 hover:from-green-600 hover:to-green-700 py-3 rounded-lg font-medium transition-all duration-300 select-vault" data-vault="0">
-                        Select Pool
                     </button>
                 </div>
             </div>
@@ -365,7 +337,7 @@
             <div class="bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl p-8 border border-gray-700 shadow-2xl">
                 <h2 class="text-2xl font-bold mb-6 flex items-center">
                     <i class="fas fa-coins text-silver-400 mr-3"></i>
-                    Invest in <span id="investmentTitle" class="text-silver-400 ml-2">General Pool</span>
+                    Invest in <span id="investmentTitle" class="text-silver-400 ml-2">35-Day Vault</span>
                 </h2>
                 
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -377,8 +349,8 @@
                                 <input type="number" 
                                        id="investmentAmount" 
                                        class="w-full bg-gray-900 border-2 border-gray-700 rounded-xl py-5 px-6 text-2xl font-bold focus:outline-none focus:border-silver-500 transition-colors placeholder-gray-500"
-                                       placeholder="0.00"
-                                       min="1"
+                                       placeholder="10.00"
+                                       min="10"
                                        step="0.01"
                                        value="10">
                                 <div class="absolute right-4 top-1/2 transform -translate-y-1/2">
@@ -389,7 +361,7 @@
                             </div>
                             <div class="flex justify-between text-sm text-gray-400 mt-3 px-2">
                                 <span>Available: <span id="availableBalance" class="text-white font-medium">0</span> MATIC</span>
-                                <span>Minimum: <span class="text-white font-medium">1</span> MATIC</span>
+                                <span>Minimum: <span class="text-white font-medium">10</span> MATIC</span>
                             </div>
                         </div>
                         
@@ -418,26 +390,26 @@
                             <div class="space-y-5">
                                 <div class="flex justify-between items-center">
                                     <span class="text-gray-300">You Invest:</span>
-                                    <span id="summaryInvest" class="text-2xl font-bold">0.00 MATIC</span>
+                                    <span id="summaryInvest" class="text-2xl font-bold">10.00 MATIC</span>
                                 </div>
                                 
                                 <div class="flex justify-between items-center">
                                     <span class="text-gray-300">Token Amount:</span>
-                                    <span id="summaryTokens" class="text-2xl font-bold text-silver-400">0.00 BMC1x</span>
+                                    <span id="summaryTokens" class="text-2xl font-bold text-silver-400">1000.00 BMC1x</span>
                                 </div>
                                 
                                 <div class="flex justify-between items-center pt-4 border-t border-gray-700">
                                     <span class="text-gray-300">Transaction Fee (0.05%):</span>
-                                    <span id="summaryFee" class="text-xl font-bold text-red-400">0.00 BMC1x</span>
+                                    <span id="summaryFee" class="text-xl font-bold text-red-400">0.50 BMC1x</span>
                                 </div>
                                 
                                 <div class="flex justify-between items-center">
                                     <span class="text-gray-300">Net Received:</span>
-                                    <span id="summaryNet" class="text-3xl font-bold text-green-400">0.00 BMC1x</span>
+                                    <span id="summaryNet" class="text-3xl font-bold text-green-400">999.50 BMC1x</span>
                                 </div>
                                 
                                 <!-- Vault Details -->
-                                <div id="vaultDetails" class="hidden pt-6 border-t border-gray-700">
+                                <div id="vaultDetails" class="pt-6 border-t border-gray-700">
                                     <h4 class="font-bold text-gray-300 mb-4">Vault Details</h4>
                                     <div class="space-y-3">
                                         <div class="flex justify-between">
@@ -451,25 +423,6 @@
                                         <div class="flex justify-between">
                                             <span class="text-gray-400">Early Withdrawal:</span>
                                             <span class="text-red-300 font-medium">25% + 0.05% fee</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <!-- Pool Details -->
-                                <div id="poolDetails" class="hidden pt-6 border-t border-gray-700">
-                                    <h4 class="font-bold text-gray-300 mb-4">Pool Details</h4>
-                                    <div class="space-y-3">
-                                        <div class="flex justify-between">
-                                            <span class="text-gray-400">Availability:</span>
-                                            <span class="text-green-300 font-medium">Immediate</span>
-                                        </div>
-                                        <div class="flex justify-between">
-                                            <span class="text-gray-400">Transfer Fee:</span>
-                                            <span class="font-medium">0.05% per transaction</span>
-                                        </div>
-                                        <div class="flex justify-between">
-                                            <span class="text-gray-400">Trading:</span>
-                                            <span class="text-green-300 font-medium">Unrestricted</span>
                                         </div>
                                     </div>
                                 </div>
@@ -499,6 +452,11 @@
                 <div class="bg-gray-800/50 rounded-xl p-6">
                     <h3 class="font-bold text-lg mb-2">Can I have multiple vaults?</h3>
                     <p class="text-gray-300">No, each wallet address can only have one active vault at a time.</p>
+                </div>
+                
+                <div class="bg-gray-800/50 rounded-xl p-6">
+                    <h3 class="font-bold text-lg mb-2">What's the minimum investment?</h3>
+                    <p class="text-gray-300">Minimum investment is 10 MATIC (which gives you 1000 BMC1x tokens).</p>
                 </div>
             </div>
         </section>
@@ -565,6 +523,7 @@
                 
                 <h3 class="text-2xl font-bold mb-2" id="modalTitle">Processing Transaction</h3>
                 <p class="text-gray-400 mb-6" id="modalMessage">Please confirm the transaction in your wallet...</p>
+                <p id="transactionHash" class="text-xs font-mono text-gray-500 mb-6 break-all hidden"></p>
                 
                 <button id="closeModal" class="bg-gradient-to-r from-bmc-blue to-blue-900 hover:from-blue-700 hover:to-blue-800 px-6 py-3 rounded-lg transition-colors">
                     Close
@@ -577,409 +536,5 @@
     <script src="https://cdn.ethers.io/lib/ethers-5.7.umd.min.js"></script>
     
     <script>
-        // CONFIGURATION - YOUR CONTRACT ADDRESS IS ALREADY HERE!
-        const CONFIG = {
-            CONTRACT_ADDRESS: "0x2E326746b717c534cE6292F98A34dcE270A94f78",
-            CONTRACT_ABI: [
-                "function name() view returns (string)",
-                "function symbol() view returns (string)",
-                "function decimals() view returns (uint8)",
-                "function totalSupply() view returns (uint256)",
-                "function balanceOf(address) view returns (uint256)",
-                "function transfer(address, uint256) returns (bool)",
-                "function buyWithVault(uint8) payable",
-                "function claimMaturedTokens()",
-                "function withdrawEarlyFromVault()",
-                "function getUserVault(address) view returns (uint256, uint256, uint8, uint256, bool)",
-                "function getTimeUntilMaturity(address) view returns (uint256)"
-            ],
-            NETWORK: {
-                chainId: "0x89",
-                chainName: "Polygon Mainnet",
-                nativeCurrency: { name: "MATIC", symbol: "MATIC", decimals: 18 },
-                rpcUrls: ["https://polygon-rpc.com/"]
-            },
-            VAULT_TYPES: {
-                0: { name: "General Pool", days: 0, color: "green" },
-                1: { name: "35-Day Vault", days: 35, color: "blue" },
-                2: { name: "65-Day Vault", days: 65, color: "purple" },
-                3: { name: "95-Day Vault", days: 95, color: "amber" }
-            },
-            FEES: { transaction: 5, earlyWithdrawalPenalty: 2500 },
-            UI: { conversionRate: 100, minInvestment: 1 }
-        };
-        
-        // Helper Functions
-        function formatAddress(address) {
-            if (!address) return "";
-            return address.substring(0, 6) + "..." + address.substring(address.length - 4);
-        }
-        
-        function formatNumber(number, decimals = 2) {
-            return parseFloat(number).toLocaleString('en-US', {
-                minimumFractionDigits: decimals,
-                maximumFractionDigits: decimals
-            });
-        }
-        
-        // Wallet Connection
-        class WalletManager {
-            constructor() {
-                this.isConnected = false;
-                this.address = null;
-                this.provider = null;
-            }
-            
-            async connect() {
-                try {
-                    if (typeof window.ethereum === 'undefined') {
-                        alert('Please install MetaMask to use this DApp');
-                        return;
-                    }
-                    
-                    // Request account access
-                    const accounts = await window.ethereum.request({
-                        method: 'eth_requestAccounts'
-                    });
-                    
-                    this.address = accounts[0];
-                    this.isConnected = true;
-                    this.provider = new ethers.providers.Web3Provider(window.ethereum);
-                    
-                    this.updateUI();
-                    this.showToast('Wallet connected successfully!', 'success');
-                    
-                    // Check network
-                    await this.checkNetwork();
-                    
-                } catch (error) {
-                    console.error('Wallet connection error:', error);
-                    this.showToast('Failed to connect wallet', 'error');
-                }
-            }
-            
-            async checkNetwork() {
-                try {
-                    const network = await this.provider.getNetwork();
-                    if (network.chainId !== 137) { // Polygon Mainnet
-                        this.showToast('Please switch to Polygon Mainnet', 'warning');
-                    }
-                } catch (error) {
-                    console.error('Network check error:', error);
-                }
-            }
-            
-            disconnect() {
-                this.isConnected = false;
-                this.address = null;
-                this.provider = null;
-                this.updateUI();
-                this.showToast('Wallet disconnected', 'info');
-            }
-            
-            updateUI() {
-                const statusEl = document.getElementById('walletStatus');
-                const buttonEl = document.getElementById('connectWallet');
-                const mobileBtn = document.getElementById('mobileConnect');
-                const addressEl = document.getElementById('walletAddress');
-                
-                if (this.isConnected && this.address) {
-                    // Show connected
-                    if (statusEl) statusEl.classList.remove('hidden');
-                    if (buttonEl) {
-                        buttonEl.innerHTML = '<i class="fas fa-check-circle mr-2"></i>Connected';
-                        buttonEl.classList.remove('from-bmc-blue', 'to-blue-900');
-                        buttonEl.classList.add('from-green-600', 'to-green-800');
-                    }
-                    if (mobileBtn) {
-                        mobileBtn.innerHTML = '<i class="fas fa-check-circle mr-2"></i>Connected';
-                        mobileBtn.classList.remove('from-bmc-blue', 'to-blue-900');
-                        mobileBtn.classList.add('from-green-600', 'to-green-800');
-                    }
-                    if (addressEl) addressEl.textContent = formatAddress(this.address);
-                    
-                } else {
-                    // Show disconnected
-                    if (statusEl) statusEl.classList.add('hidden');
-                    if (buttonEl) {
-                        buttonEl.innerHTML = '<i class="fas fa-wallet mr-2"></i>Connect Wallet';
-                        buttonEl.classList.remove('from-green-600', 'to-green-800');
-                        buttonEl.classList.add('from-bmc-blue', 'to-blue-900');
-                    }
-                    if (mobileBtn) {
-                        mobileBtn.innerHTML = 'Connect Wallet';
-                        mobileBtn.classList.remove('from-green-600', 'to-green-800');
-                        mobileBtn.classList.add('from-bmc-blue', 'to-blue-900');
-                    }
-                }
-            }
-            
-            showToast(message, type = 'info') {
-                // Create toast element
-                const toast = document.createElement('div');
-                toast.className = `fixed top-4 right-4 px-6 py-4 rounded-xl shadow-2xl z-50 ${
-                    type === 'success' ? 'bg-green-700' :
-                    type === 'error' ? 'bg-red-700' :
-                    type === 'warning' ? 'bg-amber-700' : 'bg-blue-700'
-                }`;
-                toast.innerHTML = `
-                    <div class="flex items-center">
-                        <i class="fas fa-${
-                            type === 'success' ? 'check-circle' :
-                            type === 'error' ? 'exclamation-circle' :
-                            type === 'warning' ? 'exclamation-triangle' : 'info-circle'
-                        } mr-3"></i>
-                        <span>${message}</span>
-                    </div>
-                `;
-                
-                document.body.appendChild(toast);
-                
-                // Remove after 3 seconds
-                setTimeout(() => {
-                    toast.remove();
-                }, 3000);
-            }
-        }
-        
-        // UI Manager
-        class UIManager {
-            constructor() {
-                this.selectedVault = null;
-                this.setupEventListeners();
-            }
-            
-            setupEventListeners() {
-                // Vault selection
-                document.querySelectorAll('.select-vault').forEach(btn => {
-                    btn.addEventListener('click', (e) => {
-                        const vaultType = parseInt(e.target.getAttribute('data-vault'));
-                        this.selectVault(vaultType);
-                    });
-                });
-                
-                // Quick amount buttons
-                document.querySelectorAll('.quick-amount').forEach(btn => {
-                    btn.addEventListener('click', (e) => {
-                        const percent = parseInt(e.target.getAttribute('data-percent'));
-                        this.setQuickAmount(percent);
-                    });
-                });
-                
-                // Max button
-                document.getElementById('maxButton')?.addEventListener('click', () => {
-                    this.setMaxAmount();
-                });
-                
-                // Investment amount input
-                const amountInput = document.getElementById('investmentAmount');
-                if (amountInput) {
-                    amountInput.addEventListener('input', () => {
-                        this.updateCalculations();
-                    });
-                }
-                
-                // Mobile menu
-                document.getElementById('mobileMenuButton')?.addEventListener('click', () => {
-                    const menu = document.getElementById('mobileMenu');
-                    menu.classList.toggle('hidden');
-                });
-                
-                // Close modal
-                document.getElementById('closeModal')?.addEventListener('click', () => {
-                    document.getElementById('transactionModal').classList.add('hidden');
-                });
-            }
-            
-            selectVault(vaultType) {
-                this.selectedVault = vaultType;
-                
-                // Update UI
-                document.querySelectorAll('.vault-card').forEach(card => {
-                    card.classList.remove('selected');
-                });
-                
-                const selectedCard = document.querySelector(`[data-vault="${vaultType}"]`);
-                if (selectedCard) {
-                    selectedCard.classList.add('selected');
-                }
-                
-                // Show investment interface
-                const investmentInterface = document.getElementById('investmentInterface');
-                if (investmentInterface) {
-                    investmentInterface.classList.remove('hidden');
-                    
-                    // Update title
-                    const title = document.getElementById('investmentTitle');
-                    if (title) {
-                        const vaultName = CONFIG.VAULT_TYPES[vaultType]?.name || 'General Pool';
-                        title.textContent = vaultName;
-                    }
-                    
-                    // Show/hide details
-                    if (vaultType === 0) {
-                        document.getElementById('poolDetails')?.classList.remove('hidden');
-                        document.getElementById('vaultDetails')?.classList.add('hidden');
-                        document.getElementById('selectionWarning')?.classList.add('hidden');
-                    } else {
-                        document.getElementById('poolDetails')?.classList.add('hidden');
-                        document.getElementById('vaultDetails')?.classList.remove('hidden');
-                        document.getElementById('selectionWarning')?.classList.remove('hidden');
-                        
-                        // Update vault details
-                        const vaultTypeEl = document.getElementById('selectedVaultType');
-                        const durationEl = document.getElementById('detailDuration');
-                        const warningDays = document.getElementById('warningDays');
-                        
-                        if (vaultTypeEl) vaultTypeEl.textContent = CONFIG.VAULT_TYPES[vaultType]?.name;
-                        if (durationEl) durationEl.textContent = CONFIG.VAULT_TYPES[vaultType]?.days + ' days';
-                        if (warningDays) warningDays.textContent = CONFIG.VAULT_TYPES[vaultType]?.days;
-                        
-                        // Calculate unlock date
-                        this.updateUnlockDate();
-                    }
-                }
-                
-                // Update calculations
-                this.updateCalculations();
-            }
-            
-            setQuickAmount(percent) {
-                const input = document.getElementById('investmentAmount');
-                if (!input) return;
-                
-                // For demo, use 100 MATIC as available balance
-                const available = 100;
-                const amount = (available * percent) / 100;
-                input.value = amount.toFixed(2);
-                
-                this.updateCalculations();
-            }
-            
-            setMaxAmount() {
-                const input = document.getElementById('investmentAmount');
-                if (!input) return;
-                
-                // For demo, use 100 MATIC
-                input.value = '100.00';
-                this.updateCalculations();
-            }
-            
-            updateCalculations() {
-                const input = document.getElementById('investmentAmount');
-                if (!input) return;
-                
-                const amount = parseFloat(input.value) || 0;
-                
-                // Calculate values
-                const tokens = amount * CONFIG.UI.conversionRate;
-                const fee = tokens * (CONFIG.FEES.transaction / 10000);
-                const net = tokens - fee;
-                
-                // Update UI
-                const summaryInvest = document.getElementById('summaryInvest');
-                const summaryTokens = document.getElementById('summaryTokens');
-                const summaryFee = document.getElementById('summaryFee');
-                const summaryNet = document.getElementById('summaryNet');
-                
-                if (summaryInvest) summaryInvest.textContent = formatNumber(amount, 2) + ' MATIC';
-                if (summaryTokens) summaryTokens.textContent = formatNumber(tokens, 2) + ' BMC1x';
-                if (summaryFee) summaryFee.textContent = formatNumber(fee, 4) + ' BMC1x';
-                if (summaryNet) summaryNet.textContent = formatNumber(net, 2) + ' BMC1x';
-            }
-            
-            updateUnlockDate() {
-                if (!this.selectedVault || this.selectedVault === 0) return;
-                
-                const days = CONFIG.VAULT_TYPES[this.selectedVault]?.days || 0;
-                const unlockDate = new Date();
-                unlockDate.setDate(unlockDate.getDate() + days);
-                
-                const unlockDateEl = document.getElementById('detailUnlock');
-                if (unlockDateEl) {
-                    unlockDateEl.textContent = unlockDate.toLocaleDateString('en-US', {
-                        year: 'numeric',
-                        month: 'short',
-                        day: 'numeric'
-                    });
-                }
-            }
-        }
-        
-        // Initialize when page loads
-        document.addEventListener('DOMContentLoaded', () => {
-            console.log('BMC1SilverX DApp initialized');
-            
-            // Initialize wallet manager
-            window.wallet = new WalletManager();
-            
-            // Initialize UI manager
-            window.ui = new UIManager();
-            
-            // Set up wallet connection button
-            document.getElementById('connectWallet')?.addEventListener('click', () => {
-                window.wallet.connect();
-            });
-            
-            document.getElementById('mobileConnect')?.addEventListener('click', () => {
-                window.wallet.connect();
-            });
-            
-            // Disconnect button
-            document.getElementById('disconnectWallet')?.addEventListener('click', () => {
-                window.wallet.disconnect();
-            });
-            
-            // Update contract address display
-            const contractDisplay = document.getElementById('contractAddressDisplay');
-            if (contractDisplay) {
-                contractDisplay.textContent = CONFIG.CONTRACT_ADDRESS;
-            }
-            
-            // Show initial calculations
-            window.ui.updateCalculations();
-        });
-        
-        // Listen for MetaMask account changes
-        if (typeof window.ethereum !== 'undefined') {
-            window.ethereum.on('accountsChanged', (accounts) => {
-                if (accounts.length === 0) {
-                    window.wallet.disconnect();
-                } else {
-                    window.wallet.address = accounts[0];
-                    window.wallet.updateUI();
-                }
-            });
-            
-            window.ethereum.on('chainChanged', () => {
-                window.location.reload();
-            });
-        }
-    </script>
-</body>
-</html>
-// Add this script at the end of your HTML
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Get current page URL
-    const currentUrl = window.location.href;
-    
-    // Make Connect Wallet button open in new tab
-    const connectBtn = document.getElementById('connectWallet');
-    if (connectBtn) {
-        connectBtn.onclick = function() {
-            window.open(currentUrl, '_blank');
-            return false;
-        };
-    }
-    
-    // Also for mobile connect button
-    const mobileBtn = document.getElementById('mobileConnect');
-    if (mobileBtn) {
-        mobileBtn.onclick = function() {
-            window.open(currentUrl, '_blank');
-            return false;
-        };
-    }
-});
-</script>
+        // FULL CONTRACT ABI - ALL FUNCTIONS INCLUDED
+        const CONTRACT_ABI = [{"inputs":[{"internalType":"address","name":"_revenueAddress","type":"address"},{"internalType":"uint256","name":"_maxTransactionAmount","type":"uint256"}],"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"owner","type":"address"},{"indexed":true,"internalType":"address","name":"spender","type":"address"},{"indexed":false,"internalType":"uint256","name":"value","type":"uint256"}],"name":"Approval","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"bool","name":"isBlacklisted","type":"bool"}],"name":"BlacklistUpdated","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"penalty","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"fee","type":"uint256"}],"name":"EarlyWithdrawal","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"from","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"},{"indexed":true,"internalType":"address","name":"to","type":"address"}],"name":"FeeCollected","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"oldAmount","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"newAmount","type":"uint256"}],"name":"MaxTransactionAmountUpdated","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"newContract","type":"address"},{"indexed":false,"internalType":"uint256","name":"deadline","type":"uint256"}],"name":"MigrationInitiated","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"previousOwner","type":"address"},{"indexed":true,"internalType":"address","name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"account","type":"address"}],"name":"Paused","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"oldAddress","type":"address"},{"indexed":false,"internalType":"address","name":"newAddress","type":"address"}],"name":"RevenueAddressChanged","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"fee","type":"uint256"}],"name":"TokensClaimed","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"from","type":"address"},{"indexed":true,"internalType":"address","name":"to","type":"address"},{"indexed":false,"internalType":"uint256","name":"value","type":"uint256"}],"name":"Transfer","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"account","type":"address"}],"name":"Unpaused","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"unlockTime","type":"uint256"},{"indexed":false,"internalType":"enum BMC1SilverX.VaultType","name":"vaultType","type":"uint8"}],"name":"VaultCreated","type":"event"},{"stateMutability":"payable","type":"fallback"},{"inputs":[],"name":"BPS_DENOMINATOR","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"CLAIM_PERIOD","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"EARLY_WITHDRAWAL_PENALTY_BPS","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"MAX_EMERGENCY_PAUSE","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"MIN_TRANSACTION_AMOUNT","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"REVENUE_CHANGE_TIMELOCK","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"TRANSACTION_FEE_BPS","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"owner","type":"address"},{"internalType":"address","name":"spender","type":"address"}],"name":"allowance","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"spender","type":"address"},{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"approve","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"account","type":"address"}],"name":"balanceOf","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"blacklisted","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"enum BMC1SilverX.VaultType","name":"vaultType","type":"uint8"}],"name":"buyWithVault","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[],"name":"claimMaturedTokens","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"completeRevenueAddressChange","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"decimals","outputs":[{"internalType":"uint8","name":"","type":"uint8"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"spender","type":"address"},{"internalType":"uint256","name":"subtractedValue","type":"uint256"}
