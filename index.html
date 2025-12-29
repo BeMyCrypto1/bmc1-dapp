@@ -6,6 +6,10 @@
     <title>BMC1SilverX DApp - Invest in Silver Token Vaults</title>
     <meta name="description" content="BMC1SilverX token with 35/65/95 day vaults. Fixed 0.05% fees. Company: BMC1 BeMyCrypto1 LLC">
     
+    <!-- Fix: CSP Meta Tag to allow ethers.js -->
+    <meta http-equiv="Content-Security-Policy" 
+          content="script-src 'self' 'unsafe-eval' https://cdn.ethers.io https://cdn.tailwindcss.com https://cdnjs.cloudflare.com/ajax/libs;">
+    
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -123,7 +127,8 @@
                         <span class="text-sm font-mono">Polygon</span>
                     </div>
                     
-                    <button id="connectWallet" class="bg-gradient-to-r from-bmc-blue to-blue-900 hover:from-blue-700 hover:to-blue-800 px-6 py-2 rounded-lg font-medium transition-all duration-300 flex items-center space-x-2 shadow-lg hover:shadow-xl">
+                    <!-- Fix: Added onclick handler directly -->
+                    <button id="connectWallet" onclick="window.connectWalletManual()" class="bg-gradient-to-r from-bmc-blue to-blue-900 hover:from-blue-700 hover:to-blue-800 px-6 py-2 rounded-lg font-medium transition-all duration-300 flex items-center space-x-2 shadow-lg hover:shadow-xl">
                         <i class="fas fa-wallet"></i>
                         <span id="walletButtonText">Connect Wallet</span>
                     </button>
@@ -143,7 +148,8 @@
                 <a href="#invest" class="block text-gray-300 hover:text-white py-2">Invest</a>
                 <a href="#faq" class="block text-gray-300 hover:text-white py-2">FAQ</a>
                 <div class="pt-4 border-t border-gray-700">
-                    <button id="mobileConnect" class="w-full bg-gradient-to-r from-bmc-blue to-blue-900 py-3 rounded-lg font-medium">
+                    <!-- Fix: Added onclick handler directly -->
+                    <button id="mobileConnect" onclick="window.connectWalletManual()" class="w-full bg-gradient-to-r from-bmc-blue to-blue-900 py-3 rounded-lg font-medium">
                         Connect Wallet
                     </button>
                 </div>
@@ -240,7 +246,8 @@
                         </div>
                     </div>
                     
-                    <button class="w-full bg-gradient-to-r from-blue-700 to-blue-800 hover:from-blue-600 hover:to-blue-700 py-3 rounded-lg font-medium transition-all duration-300 select-vault" data-vault="1">
+                    <!-- Fix: Added onclick handler directly -->
+                    <button onclick="selectVaultManual(1)" class="w-full bg-gradient-to-r from-blue-700 to-blue-800 hover:from-blue-600 hover:to-blue-700 py-3 rounded-lg font-medium transition-all duration-300">
                         Select Vault
                     </button>
                 </div>
@@ -272,7 +279,8 @@
                         </div>
                     </div>
                     
-                    <button class="w-full bg-gradient-to-r from-purple-700 to-purple-800 hover:from-purple-600 hover:to-purple-700 py-3 rounded-lg font-medium transition-all duration-300 select-vault" data-vault="2">
+                    <!-- Fix: Added onclick handler directly -->
+                    <button onclick="selectVaultManual(2)" class="w-full bg-gradient-to-r from-purple-700 to-purple-800 hover:from-purple-600 hover:to-purple-700 py-3 rounded-lg font-medium transition-all duration-300">
                         Select Vault
                     </button>
                 </div>
@@ -304,7 +312,8 @@
                         </div>
                     </div>
                     
-                    <button class="w-full bg-gradient-to-r from-amber-700 to-amber-800 hover:from-amber-600 hover:to-amber-700 py-3 rounded-lg font-medium transition-all duration-300 select-vault" data-vault="3">
+                    <!-- Fix: Added onclick handler directly -->
+                    <button onclick="selectVaultManual(3)" class="w-full bg-gradient-to-r from-amber-700 to-amber-800 hover:from-amber-600 hover:to-amber-700 py-3 rounded-lg font-medium transition-all duration-300">
                         Select Vault
                     </button>
                 </div>
@@ -348,13 +357,14 @@
                             <div class="relative">
                                 <input type="number" 
                                        id="investmentAmount" 
+                                       name="investmentAmount"
                                        class="w-full bg-gray-900 border-2 border-gray-700 rounded-xl py-5 px-6 text-2xl font-bold focus:outline-none focus:border-silver-500 transition-colors placeholder-gray-500"
                                        placeholder="10.00"
                                        min="10"
                                        step="0.01"
                                        value="10">
                                 <div class="absolute right-4 top-1/2 transform -translate-y-1/2">
-                                    <button id="maxButton" class="bg-gradient-to-r from-blue-600 to-blue-800 hover:from-blue-700 hover:to-blue-900 px-4 py-2 rounded-lg font-medium text-sm">
+                                    <button onclick="setMaxAmountManual()" class="bg-gradient-to-r from-blue-600 to-blue-800 hover:from-blue-700 hover:to-blue-900 px-4 py-2 rounded-lg font-medium text-sm">
                                         MAX
                                     </button>
                                 </div>
@@ -368,14 +378,16 @@
                         <div class="mb-8">
                             <label class="block text-gray-300 mb-3">Quick Select</label>
                             <div class="grid grid-cols-4 gap-3">
-                                <button class="quick-amount bg-gray-700 hover:bg-gray-600 py-3 rounded-lg transition-colors font-medium" data-percent="25">25%</button>
-                                <button class="quick-amount bg-gray-700 hover:bg-gray-600 py-3 rounded-lg transition-colors font-medium" data-percent="50">50%</button>
-                                <button class="quick-amount bg-gray-700 hover:bg-gray-600 py-3 rounded-lg transition-colors font-medium" data-percent="75">75%</button>
-                                <button class="quick-amount bg-gray-700 hover:bg-gray-600 py-3 rounded-lg transition-colors font-medium" data-percent="100">100%</button>
+                                <button onclick="setQuickAmountManual(25)" class="bg-gray-700 hover:bg-gray-600 py-3 rounded-lg transition-colors font-medium">25%</button>
+                                <button onclick="setQuickAmountManual(50)" class="bg-gray-700 hover:bg-gray-600 py-3 rounded-lg transition-colors font-medium">50%</button>
+                                <button onclick="setQuickAmountManual(75)" class="bg-gray-700 hover:bg-gray-600 py-3 rounded-lg transition-colors font-medium">75%</button>
+                                <button onclick="setQuickAmountManual(100)" class="bg-gray-700 hover:bg-gray-600 py-3 rounded-lg transition-colors font-medium">100%</button>
                             </div>
                         </div>
                         
-                        <button id="confirmButton" 
+                        <!-- Fix: Added onclick handler directly -->
+                        <button onclick="confirmInvestmentManual()" 
+                                id="confirmButton" 
                                 class="w-full bg-gradient-to-r from-green-600 via-green-700 to-green-800 hover:from-green-700 hover:via-green-800 hover:to-green-900 py-5 rounded-xl font-bold text-xl transition-all duration-300 shadow-lg hover:shadow-2xl disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center">
                             <i class="fas fa-lock mr-3"></i>
                             Confirm Investment
@@ -525,7 +537,7 @@
                 <p class="text-gray-400 mb-6" id="modalMessage">Please confirm the transaction in your wallet...</p>
                 <p id="transactionHash" class="text-xs font-mono text-gray-500 mb-6 break-all hidden"></p>
                 
-                <button id="closeModal" class="bg-gradient-to-r from-bmc-blue to-blue-900 hover:from-blue-700 hover:to-blue-800 px-6 py-3 rounded-lg transition-colors">
+                <button onclick="closeModalManual()" class="bg-gradient-to-r from-bmc-blue to-blue-900 hover:from-blue-700 hover:to-blue-800 px-6 py-3 rounded-lg transition-colors">
                     Close
                 </button>
             </div>
@@ -535,6 +547,195 @@
     <!-- JavaScript -->
     <script src="https://cdn.ethers.io/lib/ethers-5.7.umd.min.js"></script>
     
+    <!-- SIMPLE MANUAL FUNCTIONS - NO COMPLEX CODE -->
     <script>
-        // FULL CONTRACT ABI - ALL FUNCTIONS INCLUDED
-        const CONTRACT_ABI = [{"inputs":[{"internalType":"address","name":"_revenueAddress","type":"address"},{"internalType":"uint256","name":"_maxTransactionAmount","type":"uint256"}],"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"owner","type":"address"},{"indexed":true,"internalType":"address","name":"spender","type":"address"},{"indexed":false,"internalType":"uint256","name":"value","type":"uint256"}],"name":"Approval","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"bool","name":"isBlacklisted","type":"bool"}],"name":"BlacklistUpdated","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"penalty","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"fee","type":"uint256"}],"name":"EarlyWithdrawal","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"from","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"},{"indexed":true,"internalType":"address","name":"to","type":"address"}],"name":"FeeCollected","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"oldAmount","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"newAmount","type":"uint256"}],"name":"MaxTransactionAmountUpdated","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"newContract","type":"address"},{"indexed":false,"internalType":"uint256","name":"deadline","type":"uint256"}],"name":"MigrationInitiated","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"previousOwner","type":"address"},{"indexed":true,"internalType":"address","name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"account","type":"address"}],"name":"Paused","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"oldAddress","type":"address"},{"indexed":false,"internalType":"address","name":"newAddress","type":"address"}],"name":"RevenueAddressChanged","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"fee","type":"uint256"}],"name":"TokensClaimed","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"from","type":"address"},{"indexed":true,"internalType":"address","name":"to","type":"address"},{"indexed":false,"internalType":"uint256","name":"value","type":"uint256"}],"name":"Transfer","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"account","type":"address"}],"name":"Unpaused","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"unlockTime","type":"uint256"},{"indexed":false,"internalType":"enum BMC1SilverX.VaultType","name":"vaultType","type":"uint8"}],"name":"VaultCreated","type":"event"},{"stateMutability":"payable","type":"fallback"},{"inputs":[],"name":"BPS_DENOMINATOR","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"CLAIM_PERIOD","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"EARLY_WITHDRAWAL_PENALTY_BPS","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"MAX_EMERGENCY_PAUSE","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"MIN_TRANSACTION_AMOUNT","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"REVENUE_CHANGE_TIMELOCK","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"TRANSACTION_FEE_BPS","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"owner","type":"address"},{"internalType":"address","name":"spender","type":"address"}],"name":"allowance","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"spender","type":"address"},{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"approve","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"account","type":"address"}],"name":"balanceOf","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"blacklisted","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"enum BMC1SilverX.VaultType","name":"vaultType","type":"uint8"}],"name":"buyWithVault","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[],"name":"claimMaturedTokens","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"completeRevenueAddressChange","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"decimals","outputs":[{"internalType":"uint8","name":"","type":"uint8"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"spender","type":"address"},{"internalType":"uint256","name":"subtractedValue","type":"uint256"}
+        // GLOBAL STATE
+        window.currentVaultType = null;
+        window.isWalletConnected = false;
+        window.userAddress = null;
+        
+        // MANUAL CONNECTION FUNCTION
+        window.connectWalletManual = async function() {
+            console.log('Manual connect clicked');
+            
+            if (typeof window.ethereum === 'undefined') {
+                alert('Please install MetaMask to use this DApp');
+                return;
+            }
+            
+            try {
+                // Request account access
+                const accounts = await window.ethereum.request({
+                    method: 'eth_requestAccounts'
+                });
+                
+                window.userAddress = accounts[0];
+                window.isWalletConnected = true;
+                
+                // Update UI
+                document.getElementById('walletStatus').classList.remove('hidden');
+                document.getElementById('walletAddress').textContent = 
+                    accounts[0].substring(0, 6) + '...' + accounts[0].substring(accounts[0].length - 4);
+                
+                // Update connect button
+                const connectBtn = document.getElementById('connectWallet');
+                if (connectBtn) {
+                    connectBtn.innerHTML = '<i class="fas fa-check-circle mr-2"></i>Connected';
+                    connectBtn.classList.remove('from-bmc-blue', 'to-blue-900');
+                    connectBtn.classList.add('from-green-600', 'to-green-800');
+                }
+                
+                // Update mobile button
+                const mobileBtn = document.getElementById('mobileConnect');
+                if (mobileBtn) {
+                    mobileBtn.innerHTML = '<i class="fas fa-check-circle mr-2"></i>Connected';
+                    mobileBtn.classList.remove('from-bmc-blue', 'to-blue-900');
+                    mobileBtn.classList.add('from-green-600', 'to-green-800');
+                }
+                
+                // Show success message
+                showToast('Wallet connected successfully!', 'success');
+                
+                // Get balances (simplified)
+                try {
+                    const provider = new ethers.providers.Web3Provider(window.ethereum);
+                    const balance = await provider.getBalance(window.userAddress);
+                    const maticBalance = ethers.utils.formatEther(balance);
+                    document.getElementById('maticBalance').textContent = parseFloat(maticBalance).toFixed(2);
+                } catch (balanceError) {
+                    console.log('Could not fetch balance:', balanceError);
+                }
+                
+            } catch (error) {
+                console.error('Wallet connection error:', error);
+                showToast('Failed to connect wallet: ' + error.message, 'error');
+            }
+        };
+        
+        // MANUAL VAULT SELECTION
+        window.selectVaultManual = function(vaultType) {
+            console.log('Selecting vault type:', vaultType);
+            window.currentVaultType = vaultType;
+            
+            // Remove selected class from all vaults
+            document.querySelectorAll('.vault-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            
+            // Add selected class to clicked vault
+            const selectedCard = document.querySelector(`[data-vault="${vaultType}"]`);
+            if (selectedCard) {
+                selectedCard.classList.add('selected');
+            }
+            
+            // Show investment interface
+            document.getElementById('investmentInterface').classList.remove('hidden');
+            
+            // Update title based on vault type
+            const titles = {
+                1: '35-Day Vault',
+                2: '65-Day Vault', 
+                3: '95-Day Vault'
+            };
+            document.getElementById('investmentTitle').textContent = titles[vaultType] || 'Vault';
+            
+            // Update vault details
+            const durations = {1: '35 days', 2: '65 days', 3: '95 days'};
+            document.getElementById('detailDuration').textContent = durations[vaultType] || 'N/A';
+            
+            // Calculate unlock date
+            const days = {1: 35, 2: 65, 3: 95}[vaultType] || 0;
+            if (days > 0) {
+                const unlockDate = new Date();
+                unlockDate.setDate(unlockDate.getDate() + days);
+                document.getElementById('detailUnlock').textContent = 
+                    unlockDate.toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'short',
+                        day: 'numeric'
+                    });
+            }
+            
+            // Show warning
+            document.getElementById('selectionWarning').classList.remove('hidden');
+            document.getElementById('selectedVaultType').textContent = titles[vaultType] || 'Vault';
+            
+            // Update calculations
+            updateCalculationsManual();
+        };
+        
+        // MANUAL QUICK AMOUNT
+        window.setQuickAmountManual = function(percent) {
+            const input = document.getElementById('investmentAmount');
+            if (!input) return;
+            
+            // For demo, use 100 MATIC as available
+            const available = 100;
+            const amount = (available * percent) / 100;
+            input.value = Math.max(10, amount.toFixed(2)); // Minimum 10 MATIC
+            
+            updateCalculationsManual();
+        };
+        
+        // MANUAL MAX AMOUNT
+        window.setMaxAmountManual = function() {
+            const input = document.getElementById('investmentAmount');
+            if (!input) return;
+            
+            // For demo, use 100 MATIC
+            input.value = '100.00';
+            updateCalculationsManual();
+        };
+        
+        // UPDATE CALCULATIONS
+        function updateCalculationsManual() {
+            const input = document.getElementById('investmentAmount');
+            if (!input) return;
+            
+            const amount = parseFloat(input.value) || 10;
+            
+            // Ensure minimum
+            if (amount < 10) {
+                input.value = '10.00';
+                return;
+            }
+            
+            // Calculate
+            const tokens = amount * 100; // 1 MATIC = 100 tokens
+            const fee = tokens * 0.0005; // 0.05% fee
+            const net = tokens - fee;
+            
+            // Update UI
+            document.getElementById('summaryInvest').textContent = amount.toFixed(2) + ' MATIC';
+            document.getElementById('summaryTokens').textContent = tokens.toFixed(2) + ' BMC1x';
+            document.getElementById('summaryFee').textContent = fee.toFixed(2) + ' BMC1x';
+            document.getElementById('summaryNet').textContent = net.toFixed(2) + ' BMC1x';
+        }
+        
+        // MANUAL INVESTMENT CONFIRMATION
+        window.confirmInvestmentManual = async function() {
+            console.log('Confirm investment clicked');
+            
+            // Check wallet connected
+            if (!window.isWalletConnected) {
+                showToast('Please connect wallet first', 'error');
+                return;
+            }
+            
+            // Check vault selected
+            if (!window.currentVaultType) {
+                showToast('Please select a vault first', 'error');
+                return;
+            }
+            
+            // Check terms accepted
+            const termsCheckbox = document.getElementById('termsCheckbox');
+            if (termsCheckbox && !termsCheckbox.checked) {
+                showToast('Please accept the terms and conditions', 'error');
+                return;
+            }
+            
+            // Get amount
+            const input = document.getElementById('investmentAmount');
+            const amount = parseFloat(input.value) || 10;
+            
