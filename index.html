@@ -958,3 +958,28 @@
     </script>
 </body>
 </html>
+// Add this script at the end of your HTML
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Get current page URL
+    const currentUrl = window.location.href;
+    
+    // Make Connect Wallet button open in new tab
+    const connectBtn = document.getElementById('connectWallet');
+    if (connectBtn) {
+        connectBtn.onclick = function() {
+            window.open(currentUrl, '_blank');
+            return false;
+        };
+    }
+    
+    // Also for mobile connect button
+    const mobileBtn = document.getElementById('mobileConnect');
+    if (mobileBtn) {
+        mobileBtn.onclick = function() {
+            window.open(currentUrl, '_blank');
+            return false;
+        };
+    }
+});
+</script>
